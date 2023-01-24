@@ -32,7 +32,7 @@ using Newtonsoft.Json.Utilities;
 
 namespace Newtonsoft.Json
 {
-    internal enum JsonContainerType
+    public enum JsonContainerType
     {
         None = 0,
         Object = 1,
@@ -40,7 +40,7 @@ namespace Newtonsoft.Json
         Constructor = 3
     }
 
-    internal struct JsonPosition
+    public struct JsonPosition
     {
         private static readonly char[] SpecialCharacters = { '.', ' ', '\'', '/', '"', '[', ']', '(', ')', '\t', '\n', '\r', '\f', '\b', '\\', '\u0085', '\u2028', '\u2029' };
 

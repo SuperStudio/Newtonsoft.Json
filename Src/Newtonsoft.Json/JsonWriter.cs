@@ -45,7 +45,7 @@ namespace Newtonsoft.Json
     /// </summary>
     public abstract partial class JsonWriter : IDisposable
     {
-        internal enum State
+        public enum State
         {
             Start = 0,
             Property = 1,
@@ -172,8 +172,9 @@ namespace Newtonsoft.Json
                     case State.ObjectStart:
                         return WriteState.Object;
                     case State.Array:
-                    case State.ArrayStart:
                         return WriteState.Array;
+                    case State.ArrayStart:
+                        return WriteState.ArrayStart;
                     case State.Constructor:
                     case State.ConstructorStart:
                         return WriteState.Constructor;
@@ -844,8 +845,9 @@ namespace Newtonsoft.Json
         /// <summary>
         /// Writes indent characters.
         /// </summary>
-        protected virtual void WriteIndent()
+        protected virtual int WriteIndent()
         {
+            return 0;
         }
 
         /// <summary>
@@ -1756,7 +1758,7 @@ namespace Newtonsoft.Json
         {
         }
 
-        internal void InternalWriteStart(JsonToken token, JsonContainerType container)
+        public void InternalWriteStart(JsonToken token, JsonContainerType container)
         {
             UpdateScopeWithFinishedValue();
             AutoComplete(token);

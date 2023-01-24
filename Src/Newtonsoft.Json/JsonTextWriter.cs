@@ -43,7 +43,7 @@ namespace Newtonsoft.Json
     public partial class JsonTextWriter : JsonWriter
     {
         private const int IndentCharBufferSize = 12;
-        private readonly TextWriter _writer;
+        public readonly TextWriter _writer;
         private Base64Encoder? _base64Encoder;
         private char _indentChar;
         private int _indentation;
@@ -318,19 +318,22 @@ namespace Newtonsoft.Json
         /// <summary>
         /// Writes indent characters.
         /// </summary>
-        protected override void WriteIndent()
+        protected override int WriteIndent()
         {
             // levels of indentation multiplied by the indent count
             int currentIndentCount = Top * _indentation;
+            int count = 0;
 
             int newLineLen = SetIndentChars();
 
             _writer.Write(_indentChars, 0, newLineLen + Math.Min(currentIndentCount, IndentCharBufferSize));
-
+            count += newLineLen + Math.Min(currentIndentCount, IndentCharBufferSize);
             while ((currentIndentCount -= IndentCharBufferSize) > 0)
             {
                 _writer.Write(_indentChars, newLineLen, Math.Min(currentIndentCount, IndentCharBufferSize));
+                count += Math.Min(currentIndentCount, IndentCharBufferSize);
             }
+            return count;
         }
 
         private int SetIndentChars()
@@ -382,6 +385,8 @@ namespace Newtonsoft.Json
             _writer.Write(value);
         }
 
+        public bool HasWriteNum { get; set; }
+
         #region WriteValue methods
         /// <summary>
         /// Writes a <see cref="Object"/> value.
@@ -399,6 +404,7 @@ namespace Newtonsoft.Json
             else
 #endif
             {
+                HasWriteNum = false;
                 base.WriteValue(value);
             }
         }
